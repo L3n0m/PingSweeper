@@ -26,4 +26,6 @@ for ip in range(first_host,last_host): #é definido o range do scan
       print(addr, "--> Live")
       break #termina o script
 
-#este script foi feito baseando-se no artigo da infoseccafe
+> **Nota:** Este projeto foi desenvolvido como exercício educacional.  
+> O entendimento conceitual do ping sweep foi fortemente baseado em artigos do blog InfoSec Café, que apresentam uma excelente explicação didática do tema.  
+> Todo o código foi implementado de forma independente.
