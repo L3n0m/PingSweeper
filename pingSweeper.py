@@ -1,31 +1,44 @@
-import datetime #importando biblioteca datetime
-import plataform #importando biblioteca plataform
-import os #importando biblioteca os
+import datetime  # importando biblioteca datetime para medir o tempo de execução
+import platform  # importando biblioteca platform para identificar o sistema operacional
+import os        # importando biblioteca os para executar comandos no sistema
 
-user_input = input("Enter the network IP: ") #retorna "Enter the network IP: " e e coleta o input do usuário
-ip_parts = user_input.split('.') #separa as seções do ip do input do usuário
-network_ip = ip_parts[0]+'.'+ip_parts[2]+'.' #junta novamente as seções do ip do usuário desejadas separadas por "."
-first_host = int(input("Enter the first number: ") #define primeiro host para ping
-last_host = int(input("Enter the last number: ") #define último host para ping
-last_host += 1 #adiciona 1 ao último host para inclui-lo ao scan
-oper = plataform.system() #verfica o sistema operacional em que o script está sendo executado e armazena na variável 'oper'
-if(oper == "Windows"): #executa uma operação com base no os para adequar o ip
-  ping = "ping -n 1 "
+user_input = input("Enter the network IP (ex: 192.168.0.1): ")  # solicita o IP base da rede ao usuário
+ip_parts = user_input.split('.')  # separa o IP em partes usando o ponto como delimitador
+
+network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'  
+# reconstrói o IP da rede mantendo os três primeiros octetos (ex: 192.168.0.)
+
+first_host = int(input("Enter the first host number: "))  # define o primeiro host a ser testado
+last_host = int(input("Enter the last host number: "))    # define o último host a ser testado
+last_host += 1  # adiciona 1 para incluir o último host no range do scan
+
+oper = platform.system()  # identifica o sistema operacional em que o script está sendo executado
+
+if oper == "Windows":  # define o comando ping de acordo com o sistema operacional
+    ping = "ping -n 1 "  # parâmetro -n é usado no Windows
 else:
-  ping = "ping -c 1 "
-time1 = datetime.datetime.now() #determina o tempo de execução do script com base no tempo de inicio
-print("Scanning in progress.") #retorna "Scanning in progress"
+    ping = "ping -c 1 "  # parâmetro -c é usado em sistemas Unix/Linux
 
-for ip in range(first_host,last_host): #é definido o range do scan
-  addr = network_ip + str(ip) #junta-se o ip da rede + ip do range para obter o alvo
-  command = ping + addr #prepara o ping para ser ativado como 'command'
-  response = os.popen(command) #salva o retorno dos pings como 'response'
+time1 = datetime.datetime.now()  # registra o horário de início do scan
+print("Scanning in progress...\n")  # informa ao usuário que o scan foi iniciado
 
-  for line in list: # # retorna o 'addr(ip do alvo) + --> Live' se o alvo responder ao ping
-    if(line.count("TTL")):
-      print(addr, "--> Live")
-      break #termina o script
+for ip in range(first_host, last_host):  # percorre o range de hosts definido pelo usuário
+    addr = network_ip + str(ip)  # monta o endereço IP completo do host atual
+    command = ping + addr        # prepara o comando de ping a ser executado
+    response = os.popen(command) # executa o comando e armazena a resposta
 
-> **Nota:** Este projeto foi desenvolvido como exercício educacional.  
-> O entendimento conceitual do ping sweep foi fortemente baseado em artigos do blog InfoSec Café, que apresentam uma excelente explicação didática do tema.  
-> Todo o código foi implementado de forma independente.
+    for line in response:  # percorre cada linha da resposta do ping
+        if "TTL" in line:  # verifica se a resposta contém TTL (indica host ativo)
+            print(addr, "--> Live")  # informa que o host está ativo
+            break  # sai do loop de leitura da resposta para este host
+
+time2 = datetime.datetime.now()  # registra o horário de término do scan
+print("\nScan completed in:", time2 - time1)  # exibe o tempo total de execução do scan
+
+# -------------------------------------------------------------------------
+# Este projeto foi desenvolvido como exercício educacional e de aprendizado.
+# A base conceitual do funcionamento do ping sweep foi estudada a partir de
+# artigos do blog InfoSec Café, utilizados como referência teórica e didática.
+# A implementação do código, comentários e organização são autorais.
+#                                                                  Ass. L3n0m :p
+# -------------------------------------------------------------------------
