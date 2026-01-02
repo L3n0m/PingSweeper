@@ -31,5 +31,11 @@ nenhum sistema operácional específico necessário.
 
 ## Execução
 
-```bash
-python ping_sweeper.py
+'python ping_sweeper.py'
+
+---
+
+## Créditos
+
+Script formulado com base no artigo sobre ping Sweepers da infosec cafe. Todo crédito é deles.
+link do artigo: https://infoseccafe.com/uncategorized/making-a-python-ping-sweep-script/
